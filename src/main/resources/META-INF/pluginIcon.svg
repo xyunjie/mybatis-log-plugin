@@ -1,0 +1,21 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="databaseFill" x1="7" y1="7" x2="33" y2="33" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C8DFF"/>
+      <stop offset="1" stop-color="#2764D8"/>
+    </linearGradient>
+    <linearGradient id="sqlFill" x1="14" y1="14" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DDE9FF"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="20" cy="10" rx="13" ry="5.5" fill="url(#databaseFill)"/>
+  <path d="M7 10V26C7 29.0376 12.8203 31.5 20 31.5C27.1797 31.5 33 29.0376 33 26V10" fill="url(#databaseFill)"/>
+  <path d="M7 18C7 21.0376 12.8203 23.5 20 23.5C27.1797 23.5 33 21.0376 33 18" stroke="#A9C5FF" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M7 26C7 29.0376 12.8203 31.5 20 31.5C27.1797 31.5 33 29.0376 33 26" stroke="#A9C5FF" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="11.5" y="13.5" width="17" height="11" rx="3.5" fill="#1F4FB5" fill-opacity="0.9" stroke="#BFD3FF" stroke-width="1.2"/>
+  <path d="M15.2 21L13.4 19.15L15.2 17.3" stroke="url(#sqlFill)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24.8 17.3L26.6 19.15L24.8 21" stroke="url(#sqlFill)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18.2 22L21.3 16.2" stroke="url(#sqlFill)" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

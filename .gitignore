@@ -1,0 +1,11 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ
+.idea/
+out/
+.intellijPlatform/
+
+# OS
+.DS_Store

@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>com.github.accepted.mybatis-log-plugin</id>
+    <name>%plugin.name</name>
+    <resource-bundle>messages.MyBatisLogBundle</resource-bundle>
+    <vendor email="accepted@example.com">accepted</vendor>
+
+    <description>%plugin.description</description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow
+                id="Mybatis Log"
+                icon="/icons/toolWindow.svg"
+                anchor="right"
+                factoryClass="com.github.accepted.mybatislogplugin.MyBatisLogToolWindowFactory"
+                canCloseContents="false"/>
+
+        <projectService serviceImplementation="com.github.accepted.mybatislogplugin.service.MyBatisLogProjectService"/>
+    </extensions>
+
+    <projectListeners>
+        <listener
+                class="com.github.accepted.mybatislogplugin.listener.MyBatisExecutionListener"
+                topic="com.intellij.execution.ExecutionListener"/>
+    </projectListeners>
+</idea-plugin>
