@@ -18,7 +18,15 @@ class MyBatisLogParserTest {
         val entries = parser.parse(text, LogOrigin.MANUAL)
 
         assertEquals(1, entries.size)
-        assertEquals("select * from user where id = 1 and name = 'Alice'", entries.single().restoredSql)
+        assertEquals(
+            """
+            select *
+            from user
+            where id = 1
+                and name = 'Alice'
+            """.trimIndent(),
+            entries.single().restoredSql,
+        )
     }
 
     @Test
@@ -30,7 +38,13 @@ class MyBatisLogParserTest {
 
         val entry = parser.parse(text, LogOrigin.MANUAL).single()
 
-        assertEquals("insert into message(content, type) values ('hello,world', 'note')", entry.restoredSql)
+        assertEquals(
+            """
+            insert into message(content, type)
+            values ('hello,world', 'note')
+            """.trimIndent(),
+            entry.restoredSql,
+        )
     }
 
     @Test
@@ -42,7 +56,16 @@ class MyBatisLogParserTest {
 
         val entry = parser.parse(text, LogOrigin.MANUAL).single()
 
-        assertEquals("update user set enabled = true, score = 99, deleted_at = null where id = 7", entry.restoredSql)
+        assertEquals(
+            """
+            update user
+            set enabled = true,
+                score = 99,
+                deleted_at = null
+            where id = 7
+            """.trimIndent(),
+            entry.restoredSql,
+        )
     }
 
     @Test
@@ -76,7 +99,64 @@ class MyBatisLogParserTest {
         val entries = parser.parse(text, LogOrigin.MANUAL)
 
         assertEquals(2, entries.size)
-        assertEquals("select * from user where id = 1", entries[0].restoredSql)
-        assertEquals("select * from role where code = 'admin'", entries[1].restoredSql)
+        assertEquals(
+            """
+            select *
+            from user
+            where id = 1
+            """.trimIndent(),
+            entries[0].restoredSql,
+        )
+        assertEquals(
+            """
+            select *
+            from role
+            where code = 'admin'
+            """.trimIndent(),
+            entries[1].restoredSql,
+        )
+    }
+
+    @Test
+    fun `format insert values and preserve keyword inside string literal`() {
+        val text = """
+            Preparing: insert into audit_log(message, level) values (?, ?)
+            Parameters: value from where and select(String), info(String)
+        """.trimIndent()
+
+        val entry = parser.parse(text, LogOrigin.MANUAL).single()
+
+        assertEquals(
+            """
+            insert into audit_log(message, level)
+            values ('value from where and select', 'info')
+            """.trimIndent(),
+            entry.restoredSql,
+        )
+    }
+
+    @Test
+    fun `format join and nested conditions`() {
+        val text = """
+            Preparing: select u.id, u.name from user u left join role r on u.role_id = r.id where (u.enabled = ? and u.deleted = ?) or r.code = ? order by u.name
+            Parameters: true(Boolean), false(Boolean), admin(String)
+        """.trimIndent()
+
+        val entry = parser.parse(text, LogOrigin.MANUAL).single()
+
+        assertEquals(
+            """
+            select u.id,
+                u.name
+            from user u
+            left join role r
+            on u.role_id = r.id
+            where (u.enabled = true
+                and u.deleted = false)
+                or r.code = 'admin'
+            order by u.name
+            """.trimIndent(),
+            entry.restoredSql,
+        )
     }
 }

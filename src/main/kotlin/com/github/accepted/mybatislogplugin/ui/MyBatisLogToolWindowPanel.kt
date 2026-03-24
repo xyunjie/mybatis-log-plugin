@@ -11,6 +11,7 @@ import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.ui.JBColor
+import com.intellij.ui.OnePixelSplitter
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBList
 import com.intellij.ui.components.JBScrollPane
@@ -24,7 +25,6 @@ import javax.swing.BorderFactory
 import javax.swing.DefaultListModel
 import javax.swing.JButton
 import javax.swing.JPanel
-import javax.swing.JSplitPane
 import javax.swing.JTabbedPane
 import javax.swing.ListSelectionModel
 import javax.swing.event.DocumentEvent
@@ -104,7 +104,7 @@ class MyBatisLogToolWindowPanel(project: Project) : JPanel(BorderLayout()), Disp
         }
     }
 
-    private fun createAutoContent(): JSplitPane {
+    private fun createAutoContent(): OnePixelSplitter {
         autoEntryList.selectionMode = ListSelectionModel.SINGLE_SELECTION
         autoEntryList.cellRenderer = MyBatisLogEntryCellRenderer()
         autoEntryList.emptyText.text = MyBatisLogBundle.message("ui.auto.list.empty")
@@ -115,12 +115,9 @@ class MyBatisLogToolWindowPanel(project: Project) : JPanel(BorderLayout()), Disp
             add(JBScrollPane(autoEntryList), BorderLayout.CENTER)
         }
 
-        val rawContentPanel = JSplitPane(
-            JSplitPane.VERTICAL_SPLIT,
-            labeledPane(MyBatisLogBundle.message("ui.auto.details.parameterizedSql.title"), rawPreparingArea),
-            labeledPane(MyBatisLogBundle.message("ui.auto.details.parameters.title"), rawParametersArea),
-        ).apply {
-            resizeWeight = 0.5
+        val rawContentPanel = OnePixelSplitter(true, 0.5f).apply {
+            firstComponent = labeledPane(MyBatisLogBundle.message("ui.auto.details.parameterizedSql.title"), rawPreparingArea)
+            secondComponent = labeledPane(MyBatisLogBundle.message("ui.auto.details.parameters.title"), rawParametersArea)
             border = JBUI.Borders.emptyTop(4)
         }
 
@@ -138,17 +135,13 @@ class MyBatisLogToolWindowPanel(project: Project) : JPanel(BorderLayout()), Disp
             add(detailTabs, BorderLayout.CENTER)
         }
 
-        return JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,
-            listPanel,
-            detailPanel,
-        ).apply {
-            resizeWeight = 0.38
-            dividerSize = JBUI.scale(6)
+        return OnePixelSplitter(false, 0.38f).apply {
+            firstComponent = listPanel
+            secondComponent = detailPanel
         }
     }
 
-    private fun createManualTab(): JSplitPane {
+    private fun createManualTab(): OnePixelSplitter {
         manualInputArea.lineWrap = true
         manualInputArea.wrapStyleWord = true
         manualInputArea.font = Font(Font.MONOSPACED, Font.PLAIN, 12)
@@ -211,13 +204,9 @@ class MyBatisLogToolWindowPanel(project: Project) : JPanel(BorderLayout()), Disp
             updateManualParsedState()
         }
 
-        return JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,
-            inputPanel,
-            parsedPanel,
-        ).apply {
-            resizeWeight = 0.5
-            dividerSize = JBUI.scale(6)
+        return OnePixelSplitter(false, 0.5f).apply {
+            firstComponent = inputPanel
+            secondComponent = parsedPanel
         }
     }
 

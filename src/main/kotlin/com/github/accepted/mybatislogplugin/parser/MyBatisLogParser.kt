@@ -63,7 +63,7 @@ class MyBatisLogParser {
             return null
         }
 
-        val restoredSql = restoreSql(preparing, parsedParameters)
+        val restoredSql = MyBatisSqlFormatter.format(restoreSql(preparing, parsedParameters))
         return MyBatisLogEntry(
             id = UUID.randomUUID().toString(),
             timestamp = Instant.now(),

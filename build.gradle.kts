@@ -52,6 +52,9 @@ tasks {
     named("instrumentTestCode") {
         enabled = false
     }
+    named("buildSearchableOptions") {
+        enabled = false
+    }
     test {
         useJUnitPlatform()
     }
