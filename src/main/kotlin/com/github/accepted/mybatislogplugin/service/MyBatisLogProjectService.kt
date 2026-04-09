@@ -14,6 +14,7 @@ class MyBatisLogProjectService {
 
     fun appendEntry(entry: MyBatisLogEntry) {
         entries.add(0, entry)
+        trimAutoEntriesIfNeeded(entry.origin)
         notifyChanged()
     }
 
@@ -66,7 +67,30 @@ class MyBatisLogProjectService {
         listeners -= listener
     }
 
+    private fun trimAutoEntriesIfNeeded(origin: LogOrigin) {
+        if (origin != LogOrigin.AUTO) {
+            return
+        }
+
+        val overflow = entries.count { it.origin == LogOrigin.AUTO } - AUTO_ENTRY_LIMIT
+        if (overflow <= 0) {
+            return
+        }
+
+        val autoIndexesToRemove = entries.withIndex()
+            .filter { it.value.origin == LogOrigin.AUTO }
+            .takeLast(overflow)
+            .map { it.index }
+            .sortedDescending()
+
+        autoIndexesToRemove.forEach(entries::removeAt)
+    }
+
     private fun notifyChanged() {
         listeners.forEach { it.invoke() }
+    }
+
+    companion object {
+        private const val AUTO_ENTRY_LIMIT = 20
     }
 }
